@@ -1,0 +1,33 @@
+{
+  "name": "snackattack-backend",
+  "version": "0.1.0",
+  "bin": {
+    "store-backend": "bin/store-backend.js"
+  },
+  "scripts": {
+    "build": "tsc && esbuild lambda/*.ts --bundle --platform=node --target=node20 --outdir=dist",
+    "watch": "tsc -w",
+    "cdk": "cdk",
+    "deploy": "cdk deploy",
+    "destroy": "cdk destroy",
+    "synth": "cdk synth"
+  },
+  "dependencies": {
+    "@aws-cdk/aws-apigatewayv2": "^1.203.0",
+    "@aws-cdk/aws-apigatewayv2-integrations": "^1.203.0",
+    "@aws-sdk/client-dynamodb": "^3.799.0",
+    "@aws-sdk/lib-dynamodb": "^3.799.0",
+    "aws-cdk": "2.1005.0",
+    "aws-cdk-lib": "^2.189.0",
+    "axios": "^1.9.0",
+    "constructs": "^10.0.0",
+    "inquirer": "^12.6.0",
+    "node-fetch": "^3.3.2"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.149",
+    "@types/node": "^20.17.32",
+    "esbuild": "^0.20.0",
+    "typescript": "^5.4.0"
+  }
+}
