@@ -5,12 +5,18 @@ import { DynamoDBDocumentClient, DeleteCommand } from "@aws-sdk/lib-dynamodb";
 const client = DynamoDBDocumentClient.from(new DynamoDBClient({}));
 
 export const handler: APIGatewayProxyHandler = async (event) => {
-  const id = event.pathParameters?.id;
+  console.log(`Event: ${JSON.stringify(event)}`);
+  const { id } = JSON.parse(event.body || '{}');
 
-  await client.send(new DeleteCommand({
-    TableName: process.env.TABLE_NAME!,
+
+  const params = {
+    TableName: 'Products',
     Key: { id }
-  }));
+  };
+
+  console.log(`Attempting to delete: ${JSON.stringify(params)}`);
+
+  await client.send(new DeleteCommand( params ));
 
   return {
     statusCode: 200,

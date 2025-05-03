@@ -5,12 +5,12 @@ const ddb = new DynamoDB({ region: 'us-east-1' });
 
 export const handler: APIGatewayProxyHandler = async (event) => {
   try {
-    const { name, price, count } = JSON.parse(event.body || '{}');
+    const { name, description, imageUrl, price, count } = JSON.parse(event.body || '{}');
 
-    if (!name || !price || !count) {
+    if (!name || !description || !imageUrl || !price || !count) {
       return {
         statusCode: 400,
-        body: JSON.stringify({ message: 'Missing required fields: name, price, or count' }),
+        body: JSON.stringify({ message: 'Missing required fields: name, price, desc, imageUrl, or count' }),
       };
     }
 
@@ -19,6 +19,8 @@ export const handler: APIGatewayProxyHandler = async (event) => {
       Item: {
         id: { S: `${Date.now()}` }, // Using timestamp as unique ID
         name: { S: name },
+        description: { S: description },
+        imageUrl: { S: imageUrl },
         price: { N: price.toString() },
         count: { N: count.toString() },
       },

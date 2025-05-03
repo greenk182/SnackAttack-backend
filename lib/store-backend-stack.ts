@@ -30,6 +30,17 @@ export class StoreBackendStack extends cdk.Stack {
     });
     table.grantWriteData(createProductFn);
 
+    // Delete Product Lambda
+    const deleteProductFn = new NodejsFunction(this, 'DeleteProductFunction', {
+      entry: path.join(__dirname, '../lambda/delete-product.ts'),
+      handler: 'handler',
+      runtime: Runtime.NODEJS_20_X,
+      environment: {
+        TABLE_NAME: table.tableName,
+      },
+    });
+    table.grantFullAccess(deleteProductFn);
+
     // Get Products Lambda
     const getProductsFn = new NodejsFunction(this, 'GetProductsFunction', {
       entry: path.join(__dirname, '../lambda/get-products.ts'),
@@ -52,6 +63,11 @@ export class StoreBackendStack extends cdk.Stack {
       createProductFn
     );
 
+    const deleteProductIntegration = new HttpLambdaIntegration(
+      'DeleteProductIntegration',
+      deleteProductFn
+    );
+
     const getProductsIntegration = new HttpLambdaIntegration(
       'GetProductsIntegration',
       getProductsFn
@@ -62,6 +78,12 @@ export class StoreBackendStack extends cdk.Stack {
       path: '/products',
       methods: [HttpMethod.POST],
       integration: createProductIntegration,
+    });
+
+    httpApi.addRoutes({
+      path: '/products',
+      methods: [HttpMethod.DELETE],
+      integration: deleteProductIntegration,
     });
 
     httpApi.addRoutes({

@@ -23,6 +23,8 @@ export const handler: APIGatewayProxyHandler = async () => {
       return {
         id: item.id?.S ?? 'Unknown', // Default to 'Unknown' if id is undefined
         name: item.name?.S ?? 'Unnamed', // Default to 'Unnamed' if name is undefined
+        description: item.description?.S ?? 'Description',
+        imageURL: item.imageURL?.S ?? 'www.sample.com',
         price: item.price?.N ? parseFloat(item.price.N) : 0, // Default to 0 if price is undefined
         count: item.count?.N ? parseInt(item.count.N, 10) : 0, // Default to 0 if count is undefined
       };
